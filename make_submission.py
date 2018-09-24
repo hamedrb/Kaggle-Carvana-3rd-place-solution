@@ -6,6 +6,7 @@ import queue
 import tensorflow as tf
 from tqdm import tqdm
 from tensorflow.keras.models import load_model
+from losses import *
 
 WIDTH = 1024
 HEIGHT = 1024
