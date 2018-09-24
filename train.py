@@ -10,6 +10,8 @@ WIDTH = 1024
 HEIGHT = 1024
 BATCH_SIZE = 2
 
+INPUT_DATA_PATH = '/home/analysisstation3/projects/CNNForCarSegmentation/Input/kaggle_Carvana_Image_Masking_Challenge/all'
+OUTPUT_DATA_PATH = '/home/analysisstation3/projects/CNNForCarSegmentation/output'
 
 class ThreadSafeIterator:
 
@@ -50,10 +52,10 @@ def train_generator(df):
             ids_train_batch = df.iloc[shuffle_indices[start:end]]
             
             for _id in ids_train_batch.values:
-                img = cv2.imread('input/train_hq/{}.jpg'.format(_id))
+                img = cv2.imread(INPUT_DATA_PATH+'/train_hq/{}.jpg'.format(_id))
                 img = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
                 
-                mask = cv2.imread('input/train_masks/{}_mask.png'.format(_id), cv2.IMREAD_GRAYSCALE)
+                mask = cv2.imread(INPUT_DATA_PATH+'/train_masks/{}_mask.png'.format(_id), cv2.IMREAD_GRAYSCALE)
                 mask = cv2.resize(mask, (WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
                 mask = np.expand_dims(mask, axis=-1)
                 assert mask.ndim == 3
@@ -82,10 +84,10 @@ def valid_generator(df):
             ids_train_batch = df.iloc[start:end]
 
             for _id in ids_train_batch.values:
-                img = cv2.imread('input/train_hq/{}.jpg'.format(_id))
+                img = cv2.imread(INPUT_DATA_PATH+'/train_hq/{}.jpg'.format(_id))
                 img = cv2.resize(img, (WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
 
-                mask = cv2.imread('input/train_masks/{}_mask.png'.format(_id),
+                mask = cv2.imread(INPUT_DATA_PATH+'/train_masks/{}_mask.png'.format(_id),
                                   cv2.IMREAD_GRAYSCALE)
                 mask = cv2.resize(mask, (WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
                 mask = np.expand_dims(mask, axis=-1)
@@ -102,7 +104,7 @@ def valid_generator(df):
 
 if __name__ == '__main__':
 
-    df_train = pd.read_csv('input/train_masks.csv')
+    df_train = pd.read_csv(INPUT_DATA_PATH+'/train_masks.csv')
     ids_train = df_train['img'].map(lambda s: s.split('.')[0])
 
     ids_train, ids_valid = train_test_split(ids_train, test_size=0.1)
@@ -126,7 +128,7 @@ if __name__ == '__main__':
                                    epsilon=1e-4,
                                    mode='max'),
                  ModelCheckpoint(monitor='val_dice_coef',
-                                 filepath='model_weights.hdf5',
+                                 filepath=OUTPUT_DATA_PATH+'model_weights.hdf5',
                                  save_best_only=True,
                                  mode='max')]
 

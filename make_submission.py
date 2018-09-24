@@ -22,7 +22,7 @@ def run_length_encode(mask):
     return rle
 
 
-df_test = pd.read_csv('input/sample_submission.csv')
+df_test = pd.read_csv(INPUT_DATA_PATH+'/sample_submission.csv')
 ids_test = df_test['img'].map(lambda s: s.split('.')[0])
 
 names = []
@@ -32,7 +32,7 @@ for _id in ids_test:
 rles = []
 
 model = load_model(
-    filepath='weights/model_weights.hdf5',
+    filepath=OUTPUT_DATA_PATH+'/model_weights.hdf5',
     custom_objects={'bce_dice_loss': bce_dice_loss, 'dice_coef': dice_coef}
 )
 
@@ -49,7 +49,7 @@ def data_loader(q, ):
         ids_test_batch = ids_test[start:end]
         
         for id in ids_test_batch.values:
-            img = cv2.imread('input/test_hq/{}.jpg'.format(id))
+            img = cv2.imread(INPUT_DATA_PATH+'/test_hq/{}.jpg'.format(id))
             img = cv2.resize(img, (WIDTH, HEIGHT))
             
             x_batch.append(img)
@@ -86,4 +86,4 @@ t1.join()
 t2.join()
 
 df = pd.DataFrame({'img': names, 'rle_mask': rles})
-df.to_csv('submit/submission.csv.gz', index=False, compression='gzip')
+df.to_csv(OUTPUT_DATA_PATH+'/submission.csv.gz', index=False, compression='gzip')
