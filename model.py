@@ -1,7 +1,7 @@
-from keras.layers import Conv2D, MaxPooling2D, UpSampling2D
-from keras.layers import Input, add, concatenate
-from keras.models import Model
-from keras.optimizers import RMSprop
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, UpSampling2D
+from tensorflow.keras.layers import Input, add, concatenate
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import RMSprop
 
 from losses import (
     binary_crossentropy,

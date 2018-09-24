@@ -2,7 +2,7 @@ import threading
 import cv2
 import numpy as np
 import pandas as pd
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from sklearn.model_selection import train_test_split
 from model import get_dilated_unet
 

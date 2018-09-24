@@ -5,7 +5,7 @@ import threading
 import queue
 import tensorflow as tf
 from tqdm import tqdm
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 WIDTH = 1024
 HEIGHT = 1024
