@@ -157,8 +157,10 @@ if __name__ == '__main__':
                                  filepath=OUTPUT_DATA_PATH+'model_weights.hdf5',
                                  save_best_only=True,
                                  mode='max')]
-
-    model.fit_generator(generator=train_generator(ids_train),
+    
+    model.summary()
+    
+    history = model.fit_generator(generator=train_generator(ids_train),
                         steps_per_epoch=np.ceil(float(len(ids_train)) / float(BATCH_SIZE)),
                         epochs=100,
                         verbose=2,
