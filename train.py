@@ -164,4 +164,6 @@ if __name__ == '__main__':
                         verbose=2,
                         callbacks=callbacks,
                         validation_data=valid_generator(ids_valid),
-                        validation_steps=np.ceil(float(len(ids_valid)) / float(BATCH_SIZE)))
+                        validation_steps=np.ceil(float(len(ids_valid)) / float(BATCH_SIZE)),
+                        use_multiprocessing=True,
+                        workers=4)
