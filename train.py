@@ -14,7 +14,14 @@ INPUT_DATA_PATH = '/home/analysisstation3/projects/CNNForCarSegmentation/Input/k
 OUTPUT_DATA_PATH = '/home/analysisstation3/projects/CNNForCarSegmentation/output'
 
 class ThreadSafeIterator:
-
+    """
+    Takes an iterator/generator and makes it thread-safe by
+    serializing call to the `next` method of given iterator/generator.
+    """
+    """
+    A piece of code is thread-safe if it functions correctly during 
+    simultaneous execution by multiple threads.
+    """
     def __init__(self, it):
         self.it = it
         self.lock = threading.Lock()
@@ -30,6 +37,7 @@ class ThreadSafeIterator:
 def threadsafe_generator(f):
     """
     A decorator that takes a generator function and makes it thread-safe.
+    
     """
 
     def g(*args, **kwargs):
@@ -40,7 +48,21 @@ def threadsafe_generator(f):
 
 @threadsafe_generator
 def train_generator(df):
-    while True:
+    """
+    A generator of image batches for trainning
+    
+    Input: 
+        df: a list of image IDs, 
+    
+    Return:
+        x_batch: a batch of trainning images
+        y_batch: the corresponding masks
+    """
+    while True: # since the generator is not reseted after each epoch, so we 
+        #need this "while" to reset the "for-loop" at the beginning of each 
+        #epoch. Otherwise, at the end of the first epoch, the for-loop 
+        #reaches to end and couldn't begin again in the beginning of the 2nd
+        #epoch. 
         shuffle_indices = np.arange(len(df))
         shuffle_indices = np.random.permutation(shuffle_indices)
         
@@ -70,7 +92,11 @@ def train_generator(df):
             x_batch = np.array(x_batch, np.float32) / 255.
             y_batch = np.array(y_batch, np.float32) / 255.
             
-            yield x_batch, y_batch
+            yield x_batch, y_batch # each time a generator reaches to "yield",
+                                   #it yields the values and paused. Next time
+                                   #that the generator is called, it starts 
+                                   #exactly from the point that it was paused i.e.
+                                   #the next line after the "yield".
 
 
 @threadsafe_generator
