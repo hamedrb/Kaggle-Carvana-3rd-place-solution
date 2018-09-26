@@ -5,6 +5,7 @@ import pandas as pd
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 from sklearn.model_selection import train_test_split
 from model import get_dilated_unet
+import matplotlib.pyplot as plt
 
 WIDTH = 1024
 HEIGHT = 1024
@@ -167,3 +168,23 @@ if __name__ == '__main__':
                         callbacks=callbacks,
                         validation_data=valid_generator(ids_valid),
                         validation_steps=np.ceil(float(len(ids_valid)) / float(BATCH_SIZE)))
+    
+    
+    ### Plot the loss and dice coefficient of training and evaluation
+    plt.figure(1)
+    plt.subplot(121)
+    plt.plot(history.history['loss'], marker='o', color='blue', label='train')
+    plt.plot(history.history['val_loss'], marker='s', color='red', label='val')
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
+    
+    plt.subplot(122)
+    plt.plot(history.history['dice_coef'], marker='o', color='blue', label='train')
+    plt.plot(history.history['val_dice_coef'], marker='s', color='red', label='val')
+    plt.xlabel('epoch')
+    plt.ylabel('dice_coef')
+    
+    plt.subplots_adjust(wspace=0.4)
+    plt.show()
